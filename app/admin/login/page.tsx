@@ -19,11 +19,16 @@ export default function AdminLoginPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ password })
     });
+    const payload = await response.json().catch(() => null);
 
     setLoading(false);
 
     if (!response.ok) {
-      setError('Incorrect admin password.');
+      if (response.status === 401) {
+        setError('Incorrect admin password.');
+        return;
+      }
+      setError(payload?.error ?? 'Unable to sign in right now.');
       return;
     }
 
