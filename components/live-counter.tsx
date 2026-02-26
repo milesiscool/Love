@@ -45,7 +45,9 @@ function DigitalUnit({ unit, value }: { unit: UnitDef; value: number }) {
       <div className="absolute inset-0 rounded-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.6),inset_0_-8px_16px_rgba(85,33,48,0.12)]" />
       <div className="relative rounded-xl border border-white/35 bg-black/15 px-3 py-4 text-center shadow-[inset_0_1px_4px_rgba(255,255,255,0.35)]">
         <p className="text-[11px] uppercase tracking-[0.2em] text-muted">{unit.label}</p>
-        <p className="mt-2 font-mono text-3xl font-semibold leading-none sm:text-4xl">{String(value).padStart(unit.pad, '0')}</p>
+        <p className="mt-2 font-mono text-4xl font-semibold leading-none text-ink sm:text-5xl">
+          {String(value).padStart(unit.pad, '0')}
+        </p>
       </div>
     </article>
   );
@@ -88,13 +90,7 @@ export function LiveCounter({ state }: Props) {
         ) : null}
       </header>
 
-      <div className="relative mt-5 rounded-2xl border border-white/30 bg-white/15 p-3 font-mono text-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] sm:text-base">
-        {String(elapsed.years).padStart(2, '0')}:{String(elapsed.months).padStart(2, '0')}:{String(elapsed.days).padStart(2, '0')}:
-        {String(elapsed.hours).padStart(2, '0')}:{String(elapsed.minutes).padStart(2, '0')}:{String(elapsed.seconds).padStart(2, '0')}:
-        {String(elapsed.milliseconds).padStart(3, '0')}
-      </div>
-
-      <div className="relative mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="relative mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {units.map((unit) => (
           <DigitalUnit key={unit.key} unit={unit} value={getUnitValue(elapsed, unit.key)} />
         ))}

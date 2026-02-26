@@ -1,18 +1,34 @@
 import { NextResponse } from 'next/server';
 import { setDecision } from '@/lib/data';
+import type { AdminAction } from '@/lib/types';
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
-  const status = body?.status;
-  const override = body?.override === true;
-  const resetClock = body?.resetClock === true;
+
+  const rawAction = body?.action;
+  let action: AdminAction | undefined;
+  if (rawAction !== undefined) {
+    if (rawAction === 'accept_primary' || rawAction === 'accept_secondary' || rawAction === 'override_reset') {
+      action = rawAction;
+    } else {
+      return NextResponse.json({ error: 'Invalid admin action.' }, { status: 400 });
+    }
+  }
+
+  const legacyStatus = body?.status;
+  const legacyOverride = body?.override === true;
+  const legacyResetClock = body?.resetClock === true;
+
+  const status = action ? 'YES' : legacyStatus;
+  const override = action ? action === 'override_reset' : legacyOverride;
+  const resetClock = action ? action === 'override_reset' : legacyResetClock;
 
   if (status !== 'YES' && status !== 'NO') {
     return NextResponse.json({ error: 'Status must be YES or NO.' }, { status: 400 });
   }
 
   try {
-    const result = await setDecision(status, override, resetClock);
+    const result = await setDecision(status, override, resetClock, action);
     if (!result.ok) {
       return NextResponse.json({ error: result.reason }, { status: 409 });
     }

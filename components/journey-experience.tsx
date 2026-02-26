@@ -19,12 +19,13 @@ export function JourneyExperience({ state }: Props) {
       <LiveCounter state={state} />
       <LifeGrid />
 
-      <section className="relative overflow-hidden rounded-[2rem] border border-border bg-card/68 p-6 shadow-[0_24px_48px_rgba(98,44,68,0.18)] backdrop-blur-xl">
-        <div className="absolute -left-8 -top-8 h-20 w-20 rounded-full bg-accent/18 blur-2xl" />
-        <div className="absolute -bottom-8 right-0 h-20 w-20 rounded-full bg-accent/12 blur-2xl" />
+      <section className="relative overflow-hidden rounded-[2rem] border border-border/80 bg-card/70 p-6 shadow-[0_28px_52px_rgba(98,44,68,0.2)] backdrop-blur-xl">
+        <div className="absolute -left-10 -top-10 h-24 w-24 rounded-full bg-accent/16 blur-2xl" />
+        <div className="absolute -bottom-10 right-0 h-24 w-24 rounded-full bg-accent/12 blur-2xl" />
         <p className="text-sm uppercase tracking-[0.2em] text-muted">A Note For Cam</p>
-        <h2 className="font-display mt-2 text-3xl">A little paragraph just for her</h2>
-        <p className="relative mt-4 whitespace-pre-line rounded-2xl border border-border/70 bg-paper/60 p-4 leading-relaxed text-ink shadow-[inset_0_2px_8px_rgba(255,255,255,0.35)]">
+        <h2 className="font-display mt-2 text-3xl">The words I wanted you to feel</h2>
+        <p className="mt-2 text-sm text-muted">Update this note anytime in `lib/cam-note.ts` before sharing.</p>
+        <p className="relative mt-4 whitespace-pre-line rounded-2xl border border-border/75 bg-paper/62 p-5 leading-relaxed text-ink shadow-[inset_0_2px_12px_rgba(255,255,255,0.38)]">
           {camNote}
         </p>
       </section>

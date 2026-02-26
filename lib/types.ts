@@ -34,6 +34,10 @@ export type ElapsedParts = {
 
 export type JourneyTab = 'clock' | 'boxes' | 'milestones';
 
+export type AdminAction = 'accept_primary' | 'accept_secondary' | 'override_reset';
+
+export type AdminStep = 1 | 2 | 3;
+
 export type Json =
   | string
   | number

@@ -56,21 +56,23 @@ body::after {
 
 body::before {
   inset: 0;
+  opacity: 0.88;
   background:
-    radial-gradient(ellipse at 12% 22%, rgba(255, 183, 198, 0.42) 0 8px, transparent 9px),
-    radial-gradient(ellipse at 14% 24%, rgba(255, 204, 217, 0.3) 0 7px, transparent 8px),
-    radial-gradient(ellipse at 86% 18%, rgba(255, 188, 205, 0.35) 0 8px, transparent 9px),
-    radial-gradient(ellipse at 78% 72%, rgba(255, 201, 214, 0.28) 0 6px, transparent 7px),
-    radial-gradient(ellipse at 30% 83%, rgba(255, 180, 199, 0.26) 0 7px, transparent 8px);
+    radial-gradient(ellipse at 12% 22%, rgba(255, 183, 198, 0.34) 0 8px, transparent 9px),
+    radial-gradient(ellipse at 14% 24%, rgba(255, 204, 217, 0.25) 0 7px, transparent 8px),
+    radial-gradient(ellipse at 86% 18%, rgba(255, 188, 205, 0.31) 0 8px, transparent 9px),
+    radial-gradient(ellipse at 78% 72%, rgba(255, 201, 214, 0.24) 0 6px, transparent 7px),
+    radial-gradient(ellipse at 30% 83%, rgba(255, 180, 199, 0.2) 0 7px, transparent 8px);
 }
 
 body::after {
   inset: 0;
-  opacity: 0.24;
-  background-image:
-    radial-gradient(circle at 25% 40%, rgba(255, 255, 255, 0.7) 0 2px, transparent 3px),
-    radial-gradient(circle at 78% 70%, rgba(255, 255, 255, 0.5) 0 2px, transparent 3px),
-    radial-gradient(circle at 55% 20%, rgba(255, 255, 255, 0.4) 0 2px, transparent 3px);
+  opacity: 0.45;
+  background:
+    radial-gradient(circle at center, transparent 58%, rgba(37, 18, 22, 0.16) 100%),
+    repeating-radial-gradient(circle at 22% 24%, rgba(255, 255, 255, 0.14) 0 1px, transparent 1px 4px),
+    repeating-radial-gradient(circle at 80% 72%, rgba(255, 255, 255, 0.09) 0 1px, transparent 1px 5px);
+  mix-blend-mode: soft-light;
 }
 
 * {

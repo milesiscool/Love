@@ -1,6 +1,6 @@
 import { milestones } from '@/lib/milestones';
 import { getMetAtUtc } from '@/lib/env';
-import type { Milestone, RelationshipState, RelationshipStatus } from '@/lib/types';
+import type { AdminAction, Milestone, RelationshipState, RelationshipStatus } from '@/lib/types';
 import { getSupabaseServerClient } from '@/lib/supabase';
 import { toIsoUtc } from '@/lib/time';
 
@@ -68,7 +68,12 @@ export async function getNormalizedState() {
   };
 }
 
-export async function setDecision(status: 'YES' | 'NO', override = false, resetClock = false) {
+export async function setDecision(
+  status: 'YES' | 'NO',
+  override = false,
+  resetClock = false,
+  action?: AdminAction
+) {
   const supabase = getSupabaseServerClient();
   const current = await ensureRelationshipState();
 
@@ -101,7 +106,7 @@ export async function setDecision(status: 'YES' | 'NO', override = false, resetC
 
   await supabase.from('event_log').insert({
     event_type: 'decision_set',
-    payload: { status, override, reset_clock: resetClock }
+    payload: { status, override, reset_clock: resetClock, action: action ?? null }
   });
 
   return { ok: true as const, state: data as RelationshipState };
