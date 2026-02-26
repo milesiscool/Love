@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useMemo, useState } from 'react';
 import { LifeGrid } from '@/components/life-grid';
 import { LiveCounter } from '@/components/live-counter';
 import { camNote } from '@/lib/cam-note';
@@ -10,7 +11,47 @@ type Props = {
 };
 
 export function JourneyExperience({ state }: Props) {
-  const lastSynced = state.updated_at_utc ? new Date(state.updated_at_utc).toLocaleString() : 'Unknown';
+  const [liveState, setLiveState] = useState<RelationshipState>(state);
+
+  useEffect(() => {
+    setLiveState(state);
+  }, [state]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const refresh = async () => {
+      try {
+        const response = await fetch('/api/state', { cache: 'no-store' });
+        if (!response.ok) {
+          return;
+        }
+        const payload = (await response.json()) as { state: RelationshipState };
+        if (mounted) {
+          setLiveState(payload.state);
+        }
+      } catch {
+        // Ignore transient polling failures and keep last known state.
+      }
+    };
+
+    const intervalId = setInterval(() => {
+      void refresh();
+    }, 10000);
+
+    return () => {
+      mounted = false;
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  const lastSynced = useMemo(() => {
+    if (!liveState.updated_at_utc) {
+      return { local: 'Unknown', utc: 'Unknown' };
+    }
+    const updated = new Date(liveState.updated_at_utc);
+    return { local: updated.toLocaleString(), utc: updated.toUTCString() };
+  }, [liveState.updated_at_utc]);
 
   return (
     <section className="space-y-5">
@@ -19,11 +60,11 @@ export function JourneyExperience({ state }: Props) {
           Journey View
         </div>
         <div className="inline-flex rounded-full border border-border bg-paper/70 px-4 py-2 text-xs text-muted">
-          Last synced from DB: {lastSynced}
+          Last synced from DB: {lastSynced.local} ({lastSynced.utc})
         </div>
       </div>
 
-      <LiveCounter state={state} />
+      <LiveCounter state={liveState} />
       <LifeGrid />
 
       <section className="relative overflow-hidden rounded-[2rem] border border-border/80 bg-card/70 p-6 shadow-[0_28px_52px_rgba(98,44,68,0.2)] backdrop-blur-xl">
