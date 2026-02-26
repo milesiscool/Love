@@ -10,10 +10,17 @@ type Props = {
 };
 
 export function JourneyExperience({ state }: Props) {
+  const lastSynced = state.updated_at_utc ? new Date(state.updated_at_utc).toLocaleString() : 'Unknown';
+
   return (
     <section className="space-y-5">
-      <div className="inline-flex rounded-full border border-border bg-card/75 px-4 py-2 text-sm text-muted shadow-[0_10px_24px_rgba(94,38,56,0.16)]">
-        Journey View
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="inline-flex rounded-full border border-border bg-card/75 px-4 py-2 text-sm text-muted shadow-[0_10px_24px_rgba(94,38,56,0.16)]">
+          Journey View
+        </div>
+        <div className="inline-flex rounded-full border border-border bg-paper/70 px-4 py-2 text-xs text-muted">
+          Last synced from DB: {lastSynced}
+        </div>
       </div>
 
       <LiveCounter state={state} />
