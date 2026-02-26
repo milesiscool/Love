@@ -39,7 +39,7 @@ export default function AdminPage() {
   const [selectedAction, setSelectedAction] = useState<AdminAction | null>(null);
 
   useEffect(() => {
-    fetch('/api/state')
+    fetch('/api/state', { cache: 'no-store' })
       .then((res) => {
         if (!res.ok) {
           throw new Error('Failed to load state');
