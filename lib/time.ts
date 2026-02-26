@@ -45,11 +45,11 @@ function addMonthsUtc(date: Date, months: number) {
 export function formatElapsedParts(fromIso: string, now = new Date()): ElapsedParts {
   const anchor = new Date(fromIso);
   if (Number.isNaN(anchor.getTime())) {
-    return { years: 0, months: 0, days: 0, hours: 0, minutes: 0, seconds: 0, totalMs: 0 };
+    return { years: 0, months: 0, days: 0, hours: 0, minutes: 0, seconds: 0, milliseconds: 0, totalMs: 0 };
   }
 
   if (now.getTime() <= anchor.getTime()) {
-    return { years: 0, months: 0, days: 0, hours: 0, minutes: 0, seconds: 0, totalMs: 0 };
+    return { years: 0, months: 0, days: 0, hours: 0, minutes: 0, seconds: 0, milliseconds: 0, totalMs: 0 };
   }
 
   let cursor = new Date(anchor.getTime());
@@ -87,6 +87,8 @@ export function formatElapsedParts(fromIso: string, now = new Date()): ElapsedPa
   const minutes = Math.floor(remainderMs / minuteMs);
   remainderMs -= minutes * minuteMs;
   const seconds = Math.floor(remainderMs / secondMs);
+  remainderMs -= seconds * secondMs;
+  const milliseconds = Math.floor(remainderMs);
 
   return {
     years,
@@ -95,6 +97,7 @@ export function formatElapsedParts(fromIso: string, now = new Date()): ElapsedPa
     hours,
     minutes,
     seconds,
+    milliseconds,
     totalMs: now.getTime() - anchor.getTime()
   };
 }

@@ -19,7 +19,7 @@ export type Milestone = {
 
 export type EventLogType = 'decision_set' | 'seeded';
 
-export type ClockUnit = 'years' | 'months' | 'days' | 'hours' | 'minutes' | 'seconds';
+export type ClockUnit = 'years' | 'months' | 'days' | 'hours' | 'minutes' | 'seconds' | 'milliseconds';
 
 export type ElapsedParts = {
   years: number;
@@ -28,6 +28,7 @@ export type ElapsedParts = {
   hours: number;
   minutes: number;
   seconds: number;
+  milliseconds: number;
   totalMs: number;
 };
 
