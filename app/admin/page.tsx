@@ -104,7 +104,7 @@ export default function AdminPage() {
       <section className="w-full rounded-[2rem] border border-border/80 bg-card/75 p-6 shadow-[0_24px_48px_rgba(95,42,64,0.18)] backdrop-blur-xl sm:p-8">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-sm uppercase tracking-[0.2em] text-muted">Admin Wizard</p>
+            <p className="text-sm uppercase tracking-[0.2em] text-muted">Ask Wizard</p>
             <h1 className="font-display mt-1 text-3xl">Journey Controls</h1>
           </div>
           <form action="/api/auth/admin-logout" method="post">
@@ -113,6 +113,13 @@ export default function AdminPage() {
             </button>
           </form>
         </div>
+
+        <section className="mt-4 rounded-3xl border border-accent/35 bg-accent/10 px-5 py-6 text-center shadow-[0_18px_40px_rgba(110,44,65,0.18)]">
+          <p className="text-xs uppercase tracking-[0.24em] text-muted">Main Prompt</p>
+          <p className="font-display mt-3 text-4xl font-black leading-tight text-ink sm:text-6xl">
+            May I be your boyfriend ❤️
+          </p>
+        </section>
 
         <div className="mt-3 rounded-xl border border-border/80 bg-paper/60 p-3 text-sm text-muted">
           Current status: <span className="font-semibold text-ink">{state?.status ?? 'Loading...'}</span>
