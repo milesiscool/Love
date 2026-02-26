@@ -38,6 +38,7 @@ export function JourneyExperience({ state }: Props) {
     const intervalId = setInterval(() => {
       void refresh();
     }, 10000);
+    void refresh();
 
     return () => {
       mounted = false;
