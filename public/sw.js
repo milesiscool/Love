@@ -1,4 +1,4 @@
-const CACHE = 'love-timeline-v2';
+const CACHE = 'love-timeline-v3';
 const ASSETS = ['/login', '/manifest.webmanifest', '/icon.svg'];
 
 self.addEventListener('install', (event) => {

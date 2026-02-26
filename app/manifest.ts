@@ -2,13 +2,13 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Love Timeline',
-    short_name: 'Timeline',
-    description: 'Private relationship tracker with forever counter.',
+    name: 'Camryn + Miles Forever',
+    short_name: 'C+M Forever',
+    description: 'A cozy private journey clock for Camryn and Miles.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#f8f4ea',
-    theme_color: '#6a846b',
+    background_color: '#fff4ec',
+    theme_color: '#d67788',
     icons: [
       {
         src: '/icon.svg',

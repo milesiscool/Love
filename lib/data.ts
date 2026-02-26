@@ -1,6 +1,6 @@
 import { milestones } from '@/lib/milestones';
 import { getMetAtUtc } from '@/lib/env';
-import type { RelationshipState, RelationshipStatus } from '@/lib/types';
+import type { Milestone, RelationshipState, RelationshipStatus } from '@/lib/types';
 import { getSupabaseServerClient } from '@/lib/supabase';
 import { toIsoUtc } from '@/lib/time';
 
@@ -52,11 +52,14 @@ export async function getNormalizedState() {
   const state = await ensureRelationshipState();
   const now = Date.now();
 
-  const normalizedMilestones = milestones
-    .map((milestone) => ({
-      ...milestone,
-      kind: new Date(milestone.date_utc).getTime() <= now ? 'past' : 'future'
-    }))
+  const normalizedMilestones: Milestone[] = milestones
+    .map((milestone) => {
+      const kind: Milestone['kind'] = new Date(milestone.date_utc).getTime() <= now ? 'past' : 'future';
+      return {
+        ...milestone,
+        kind
+      };
+    })
     .sort((a, b) => +new Date(a.date_utc) - +new Date(b.date_utc));
 
   return {

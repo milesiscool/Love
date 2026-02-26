@@ -19,6 +19,20 @@ export type Milestone = {
 
 export type EventLogType = 'decision_set' | 'seeded';
 
+export type ClockUnit = 'years' | 'months' | 'days' | 'hours' | 'minutes' | 'seconds';
+
+export type ElapsedParts = {
+  years: number;
+  months: number;
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  totalMs: number;
+};
+
+export type JourneyTab = 'clock' | 'boxes' | 'milestones';
+
 export type Json =
   | string
   | number

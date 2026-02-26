@@ -2,59 +2,30 @@
 
 import { useMemo } from 'react';
 
-type Props = {
-  anchorIso: string;
-};
-
-type CellState = 'past' | 'current' | 'future';
-
-export function LifeGrid({ anchorIso }: Props) {
-  const cells = useMemo(() => {
-    const anchor = new Date(anchorIso).getTime();
-    const now = Date.now();
-    const weekMs = 7 * 24 * 60 * 60 * 1000;
-
-    return Array.from({ length: 52 * 10 }, (_, index) => {
-      const start = anchor + index * weekMs;
-      const end = start + weekMs;
-      let state: CellState = 'future';
-
-      if (now >= end) {
-        state = 'past';
-      } else if (now >= start && now < end) {
-        state = 'current';
-      }
-
-      return state;
-    });
-  }, [anchorIso]);
+export function LifeGrid() {
+  const cells = useMemo(() => Array.from({ length: 30 * 16 }, (_, index) => index), []);
 
   return (
-    <section className="rounded-2xl border border-border bg-card p-5">
-      <div className="mb-3 flex items-center justify-between">
-        <h2 className="text-lg font-medium">10-year weekly map</h2>
-        <p className="text-xs text-muted">Life Calendar-inspired view</p>
-      </div>
+    <section className="relative rounded-3xl border border-border bg-card p-6 shadow-[0_20px_45px_rgba(90,38,38,0.1)]">
+      <div className="pointer-events-none absolute -right-2 top-2 text-lg text-accent/35">✕</div>
+      <div className="pointer-events-none absolute left-5 top-5 text-sm text-accent/35">x</div>
+
+      <header className="mb-4">
+        <p className="text-sm uppercase tracking-[0.2em] text-muted">Little Moments</p>
+        <h2 className="font-display mt-2 text-3xl">Tiny Box Keepsake</h2>
+        <p className="mt-2 text-sm text-muted">A simple wall of tiny boxes for all the little memories still ahead.</p>
+      </header>
+
       <div
-        className="grid grid-cols-[repeat(26,minmax(0,1fr))] gap-1 sm:grid-cols-[repeat(52,minmax(0,1fr))]"
-        aria-label="Timeline week grid"
+        className="grid grid-cols-[repeat(15,minmax(0,1fr))] gap-1 rounded-2xl border border-border bg-paper/65 p-3 sm:grid-cols-[repeat(24,minmax(0,1fr))]"
+        aria-label="Decorative tiny box panel"
       >
-        {cells.map((state, index) => (
+        {cells.map((cell) => (
           <span
-            key={index}
-            className={[
-              'h-3 w-3 rounded-[2px] border',
-              state === 'past' ? 'border-accent bg-accent/70' : '',
-              state === 'current' ? 'border-ink bg-ink/80' : '',
-              state === 'future' ? 'border-border bg-transparent' : ''
-            ].join(' ')}
+            key={cell}
+            className="aspect-square rounded-[4px] border border-accent/25 bg-card/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.3)]"
           />
         ))}
-      </div>
-      <div className="mt-4 flex gap-4 text-xs text-muted">
-        <span>Filled: past</span>
-        <span>Solid: current week</span>
-        <span>Outline: future</span>
       </div>
     </section>
   );

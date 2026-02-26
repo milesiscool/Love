@@ -21,10 +21,10 @@ export function ThemeToggle() {
     <button
       aria-label="Toggle color theme"
       onClick={toggleTheme}
-      className="rounded-full border border-border bg-card px-3 py-1 text-sm text-ink transition hover:bg-accent/20"
+      className="rounded-full border border-border bg-card px-4 py-2 text-sm text-ink shadow-[0_8px_16px_rgba(120,50,60,0.1)] transition hover:bg-accent/20"
       type="button"
     >
-      {theme === 'dark' ? 'Light' : 'Dark'}
+      {theme === 'dark' ? 'Light ♡' : 'Dark ✕'}
     </button>
   );
 }
