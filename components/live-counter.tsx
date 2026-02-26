@@ -38,30 +38,20 @@ function getUnitValue(parts: ElapsedParts, unit: ClockUnit) {
   return parts[unit];
 }
 
-function UnitCard({
-  unit,
-  value,
-  focused
-}: {
-  unit: UnitDef;
-  value: number;
-  focused: boolean;
-}) {
+function UnitCard({ unit, value }: { unit: UnitDef; value: number }) {
   const progress = Math.min(100, Math.floor((value / unit.max) * 100));
 
   return (
-    <article
-      className={[
-        'relative overflow-hidden rounded-2xl border border-border bg-paper/70 p-4 shadow-[0_8px_20px_rgba(100,44,44,0.08)] transition-all',
-        focused ? 'scale-[1.01] ring-2 ring-accent/35' : 'opacity-90'
-      ].join(' ')}
-    >
+    <article className="relative overflow-hidden rounded-3xl border border-white/30 bg-white/18 p-4 shadow-[0_20px_34px_rgba(58,22,36,0.2)] backdrop-blur-xl">
+      <div className="absolute inset-0 rounded-3xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.55),inset_0_-6px_12px_rgba(85,33,48,0.14)]" />
       <div
-        className="pointer-events-none absolute inset-0 opacity-35"
-        style={{ background: `conic-gradient(var(--accent) ${progress}%, transparent ${progress}% 100%)` }}
+        className="pointer-events-none absolute inset-1 rounded-[1.3rem] opacity-40"
+        style={{
+          background: `conic-gradient(from 220deg, rgba(255,255,255,0.85) 0 ${progress}%, rgba(214,119,136,0.1) ${progress}% 100%)`
+        }}
       />
-      <div className="relative rounded-xl bg-card/85 p-3">
-        <p className="text-xs uppercase tracking-[0.18em] text-muted">{unit.label}</p>
+      <div className="relative rounded-2xl border border-white/30 bg-white/25 p-3 shadow-[inset_0_0_22px_rgba(255,255,255,0.42)]">
+        <p className="text-[11px] uppercase tracking-[0.2em] text-muted">{unit.label}</p>
         <p className="mt-2 text-3xl font-semibold leading-none sm:text-4xl">{String(value).padStart(2, '0')}</p>
       </div>
     </article>
@@ -70,7 +60,6 @@ function UnitCard({
 
 export function LiveCounter({ state }: Props) {
   const now = useNow(1000);
-  const [focus, setFocus] = useState<'all' | ClockUnit>('all');
 
   const mode = state.status;
   const baseTime = mode === 'YES' ? state.anniversary_start_utc ?? state.met_at_utc : state.met_at_utc;
@@ -84,64 +73,32 @@ export function LiveCounter({ state }: Props) {
 
   if (mode === 'NO') {
     return (
-      <section className="relative rounded-3xl border border-border bg-card p-6 shadow-[0_20px_45px_rgba(90,38,38,0.1)]">
+      <section className="relative overflow-hidden rounded-[2rem] border border-border/80 bg-card/62 p-6 shadow-[0_24px_48px_rgba(90,38,38,0.16)] backdrop-blur-xl">
         <p className="text-sm uppercase tracking-[0.2em] text-muted">Timeline status</p>
         <h2 className="font-display mt-2 text-3xl">Journey paused</h2>
-        <p className="mt-3 text-muted">
-          The forever clock is paused right now, but this space still holds your milestones and memories.
-        </p>
+        <p className="mt-3 text-muted">The forever clock is paused right now, but this still holds your story.</p>
       </section>
     );
   }
 
   return (
-    <section className="relative rounded-3xl border border-border bg-card p-6 shadow-[0_20px_45px_rgba(90,38,38,0.1)] sm:p-7">
-      <div className="pointer-events-none absolute -right-2 -top-2 text-2xl text-accent/40">x</div>
-      <div className="pointer-events-none absolute left-4 top-4 text-xl text-accent/40">✕</div>
-      <div className="pointer-events-none absolute bottom-4 right-6 text-lg text-accent/35">♡</div>
+    <section className="relative overflow-hidden rounded-[2rem] border border-border/75 bg-card/55 p-6 shadow-[0_30px_60px_rgba(90,38,38,0.2)] backdrop-blur-xl sm:p-7">
+      <div className="absolute -left-12 -top-12 h-36 w-36 rounded-full bg-accent/18 blur-3xl" />
+      <div className="absolute -bottom-16 right-0 h-44 w-44 rounded-full bg-accent/14 blur-3xl" />
 
       <header className="relative">
         <p className="text-sm uppercase tracking-[0.2em] text-muted">{mode === 'YES' ? 'Together for' : 'Since we met'}</p>
-        <h2 className="font-display mt-2 text-4xl sm:text-5xl">Live Journey Clock</h2>
+        <h2 className="font-display mt-2 text-4xl sm:text-5xl">Our Glass Clock</h2>
         <p className="mt-2 text-sm text-muted">Counting from {new Date(baseTime).toLocaleString()} and still going.</p>
         {mode === 'PENDING' ? (
-          <p className="mt-2 text-sm text-accent">Waiting for your yes/no milestone while the journey clock keeps time.</p>
+          <p className="mt-2 text-sm text-accent">Waiting for your yes/no milestone while the journey keeps counting.</p>
         ) : null}
       </header>
 
-      <div className="mt-5 flex flex-wrap gap-2" role="toolbar" aria-label="Clock focus">
-        <button
-          type="button"
-          onClick={() => setFocus('all')}
-          className={[
-            'rounded-full border px-3 py-1 text-sm transition',
-            focus === 'all' ? 'border-accent bg-accent text-white' : 'border-border bg-paper/70 text-ink hover:bg-paper'
-          ].join(' ')}
-        >
-          All
-        </button>
+      <div className="relative mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {units.map((unit) => (
-          <button
-            key={unit.key}
-            type="button"
-            onClick={() => setFocus(unit.key)}
-            className={[
-              'rounded-full border px-3 py-1 text-sm transition',
-              focus === unit.key
-                ? 'border-accent bg-accent text-white'
-                : 'border-border bg-paper/70 text-ink hover:bg-paper'
-            ].join(' ')}
-          >
-            {unit.label}
-          </button>
+          <UnitCard key={unit.key} unit={unit} value={getUnitValue(elapsed, unit.key)} />
         ))}
-      </div>
-
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {units.map((unit) => {
-          const focused = focus === 'all' || focus === unit.key;
-          return <UnitCard key={unit.key} unit={unit} value={getUnitValue(elapsed, unit.key)} focused={focused} />;
-        })}
       </div>
     </section>
   );

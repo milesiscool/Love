@@ -5,7 +5,7 @@ import { getNormalizedState } from '@/lib/data';
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  const { state, milestones } = await getNormalizedState();
+  const { state } = await getNormalizedState();
 
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-6 sm:py-10">
@@ -18,7 +18,7 @@ export default async function HomePage() {
         <ThemeToggle />
       </header>
 
-      <JourneyExperience state={state} milestones={milestones} />
+      <JourneyExperience state={state} />
     </main>
   );
 }

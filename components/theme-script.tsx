@@ -1,9 +1,10 @@
 const themeScript = `(() => {
   try {
-    const stored = localStorage.getItem('theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme = stored === 'light' || stored === 'dark' ? stored : (systemPrefersDark ? 'dark' : 'light');
-    document.documentElement.classList.toggle('dark', theme === 'dark');
+    const mode = localStorage.getItem('theme-mode') || 'auto';
+    const hour = new Date().getHours();
+    const autoDark = hour >= 19 || hour < 7;
+    const isDark = mode === 'dark' || (mode === 'auto' && autoDark);
+    document.documentElement.classList.toggle('dark', isDark);
   } catch {
     document.documentElement.classList.remove('dark');
   }

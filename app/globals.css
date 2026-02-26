@@ -48,29 +48,29 @@ body {
 
 body::before,
 body::after {
+  content: '';
   position: fixed;
-  z-index: -1;
   pointer-events: none;
-  color: rgba(214, 119, 136, 0.12);
-  font-family: var(--font-display), cursive;
-  letter-spacing: 0.35rem;
-  user-select: none;
+  z-index: -1;
 }
 
 body::before {
-  content: 'x  x   ♡   x  ♡   x';
-  top: 8vh;
-  left: 5vw;
-  font-size: clamp(0.85rem, 1.2vw, 1.1rem);
-  transform: rotate(-8deg);
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 12% 22%, rgba(255, 183, 198, 0.42) 0 8px, transparent 9px),
+    radial-gradient(ellipse at 14% 24%, rgba(255, 204, 217, 0.3) 0 7px, transparent 8px),
+    radial-gradient(ellipse at 86% 18%, rgba(255, 188, 205, 0.35) 0 8px, transparent 9px),
+    radial-gradient(ellipse at 78% 72%, rgba(255, 201, 214, 0.28) 0 6px, transparent 7px),
+    radial-gradient(ellipse at 30% 83%, rgba(255, 180, 199, 0.26) 0 7px, transparent 8px);
 }
 
 body::after {
-  content: '♡   x   ♡   x  x   ♡';
-  right: 5vw;
-  bottom: 9vh;
-  font-size: clamp(0.85rem, 1.2vw, 1.1rem);
-  transform: rotate(7deg);
+  inset: 0;
+  opacity: 0.24;
+  background-image:
+    radial-gradient(circle at 25% 40%, rgba(255, 255, 255, 0.7) 0 2px, transparent 3px),
+    radial-gradient(circle at 78% 70%, rgba(255, 255, 255, 0.5) 0 2px, transparent 3px),
+    radial-gradient(circle at 55% 20%, rgba(255, 255, 255, 0.4) 0 2px, transparent 3px);
 }
 
 * {
