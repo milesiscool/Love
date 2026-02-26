@@ -32,11 +32,12 @@ export default function AdminPage() {
     const data = new FormData(event.currentTarget);
     const status = String(data.get('status') ?? '');
     const override = data.get('override') === 'on';
+    const resetClock = data.get('resetClock') === 'on';
 
     const response = await fetch('/api/admin/decision', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status, override })
+      body: JSON.stringify({ status, override, resetClock })
     });
 
     const payload = await response.json();
@@ -67,17 +68,21 @@ export default function AdminPage() {
 
         <form className="mt-5 space-y-3" onSubmit={setDecision}>
           <fieldset className="space-y-2">
-            <legend className="text-sm">Set response</legend>
+            <legend className="text-sm">Set acceptance</legend>
             <label className="flex items-center gap-2 text-sm">
               <input type="radio" name="status" value="YES" required /> YES
             </label>
             <label className="flex items-center gap-2 text-sm">
-              <input type="radio" name="status" value="NO" required /> NO
+              <input type="radio" name="status" value="YES" required /> NO
             </label>
           </fieldset>
 
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" name="override" /> Allow override if already decided
+            <input type="checkbox" name="override" /> Allow override if already decided (resets YES timer)
+          </label>
+
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" name="resetClock" /> Force-reset start time to now
           </label>
 
           <button

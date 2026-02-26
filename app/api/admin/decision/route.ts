@@ -5,13 +5,14 @@ export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
   const status = body?.status;
   const override = body?.override === true;
+  const resetClock = body?.resetClock === true;
 
   if (status !== 'YES' && status !== 'NO') {
     return NextResponse.json({ error: 'Status must be YES or NO.' }, { status: 400 });
   }
 
   try {
-    const result = await setDecision(status, override);
+    const result = await setDecision(status, override, resetClock);
     if (!result.ok) {
       return NextResponse.json({ error: result.reason }, { status: 409 });
     }

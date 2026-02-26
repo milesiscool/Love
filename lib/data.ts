@@ -68,7 +68,7 @@ export async function getNormalizedState() {
   };
 }
 
-export async function setDecision(status: 'YES' | 'NO', override = false) {
+export async function setDecision(status: 'YES' | 'NO', override = false, resetClock = false) {
   const supabase = getSupabaseServerClient();
   const current = await ensureRelationshipState();
 
@@ -77,12 +77,19 @@ export async function setDecision(status: 'YES' | 'NO', override = false) {
   }
 
   const nowIso = toIsoUtc();
+  const nextAnniversaryStartUtc =
+    status === 'YES'
+      ? override || resetClock || current.status !== 'YES' || !current.anniversary_start_utc
+        ? nowIso
+        : current.anniversary_start_utc
+      : null;
+
   const next = {
     id: 1,
     status,
     met_at_utc: current.met_at_utc,
     decided_at_utc: nowIso,
-    anniversary_start_utc: status === 'YES' ? nowIso : null,
+    anniversary_start_utc: nextAnniversaryStartUtc,
     updated_at_utc: nowIso
   };
 
@@ -94,7 +101,7 @@ export async function setDecision(status: 'YES' | 'NO', override = false) {
 
   await supabase.from('event_log').insert({
     event_type: 'decision_set',
-    payload: { status, override }
+    payload: { status, override, reset_clock: resetClock }
   });
 
   return { ok: true as const, state: data as RelationshipState };
