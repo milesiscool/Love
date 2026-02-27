@@ -45,6 +45,10 @@ npm run dev
 
 See `docs/deployment.md`.
 
+## Integrations workflow
+
+See `docs/integrations.md`.
+
 ## Setup checklist
 
 See `docs/setup-checklist.md`.
