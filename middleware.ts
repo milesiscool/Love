@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { decryptSession } from '@/lib/session';
-import { getAdminCookieSecret, getViewerCookieSecret } from '@/lib/env';
+import { decryptSession } from './lib/session';
+import { getAdminCookieSecret, getViewerCookieSecret } from './lib/env';
 
 async function hasValidViewerSessionAsync(request: NextRequest) {
   const token = request.cookies.get('viewer_session')?.value;
