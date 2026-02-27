@@ -1,6 +1,78 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { decryptSession } from './lib/session';
-import { getAdminCookieSecret, getViewerCookieSecret } from './lib/env';
+
+type SessionPayload = {
+  role: 'viewer' | 'admin';
+  iat: number;
+  exp: number;
+};
+
+function normalizeEnvValue(value: string) {
+  const trimmed = value.trim();
+  const singleQuoted = /^'(.*)'$/.exec(trimmed);
+  if (singleQuoted) {
+    return singleQuoted[1];
+  }
+  const doubleQuoted = /^"(.*)"$/.exec(trimmed);
+  if (doubleQuoted) {
+    return doubleQuoted[1];
+  }
+  return trimmed;
+}
+
+function getViewerCookieSecret() {
+  return normalizeEnvValue(process.env.VIEWER_COOKIE_SECRET ?? '');
+}
+
+function getAdminCookieSecret() {
+  return normalizeEnvValue(process.env.ADMIN_COOKIE_SECRET ?? '');
+}
+
+function fromHex(input: string) {
+  if (input.length % 2 !== 0) {
+    throw new Error('Invalid hex');
+  }
+  const bytes = new Uint8Array(input.length / 2);
+  for (let i = 0; i < input.length; i += 2) {
+    bytes[i / 2] = Number.parseInt(input.slice(i, i + 2), 16);
+  }
+  return bytes;
+}
+
+async function getHmacKey(secret: string) {
+  return crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['verify']
+  );
+}
+
+async function decryptSession(token: string, secret: string): Promise<SessionPayload | null> {
+  try {
+    const [payloadHex, signatureHex] = token.split('.');
+    if (!payloadHex || !signatureHex) {
+      return null;
+    }
+
+    const payloadBytes = fromHex(payloadHex);
+    const signatureBytes = fromHex(signatureHex);
+    const key = await getHmacKey(secret);
+    const isValid = await crypto.subtle.verify('HMAC', key, signatureBytes, payloadBytes);
+
+    if (!isValid) {
+      return null;
+    }
+
+    const payload = JSON.parse(new TextDecoder().decode(payloadBytes)) as SessionPayload;
+    if (Date.now() / 1000 > payload.exp) {
+      return null;
+    }
+    return payload;
+  } catch {
+    return null;
+  }
+}
 
 async function hasValidViewerSessionAsync(request: NextRequest) {
   const token = request.cookies.get('viewer_session')?.value;
