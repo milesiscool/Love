@@ -102,6 +102,20 @@ export function formatElapsedParts(fromIso: string, now = new Date()): ElapsedPa
   };
 }
 
+export function computeCompletedWeeks(baseTimeIso: string, now = new Date()): number {
+  const base = new Date(baseTimeIso);
+  if (Number.isNaN(base.getTime()) || now.getTime() <= base.getTime()) return 0;
+  return Math.floor((now.getTime() - base.getTime()) / (7 * 24 * 60 * 60 * 1000));
+}
+
+export function weekDateRange(baseTimeIso: string, weekIndex: number): { start: Date; end: Date } {
+  const base = new Date(baseTimeIso);
+  const weekMs = 7 * 24 * 60 * 60 * 1000;
+  const start = new Date(base.getTime() + weekIndex * weekMs);
+  const end = new Date(start.getTime() + 6 * 24 * 60 * 60 * 1000);
+  return { start, end };
+}
+
 export function toIsoUtc(date = new Date()) {
   return date.toISOString();
 }
