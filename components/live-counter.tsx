@@ -39,9 +39,12 @@ function getUnitValue(parts: ElapsedParts, unit: ClockUnit) {
   return parts[unit];
 }
 
-function DigitalUnit({ unit, value }: { unit: UnitDef; value: number }) {
+function DigitalUnit({ unit, value, index }: { unit: UnitDef; value: number; index: number }) {
   return (
-    <article className="relative overflow-hidden rounded-2xl border border-white/30 bg-white/20 p-4 shadow-[0_16px_30px_rgba(58,22,36,0.18)] backdrop-blur-lg">
+    <article
+      className="animate-fade-in-up relative overflow-hidden rounded-2xl border border-white/30 bg-gradient-to-b from-white/25 to-white/10 p-4 shadow-[0_16px_30px_rgba(58,22,36,0.18)] backdrop-blur-lg"
+      style={{ animationDelay: `${index * 60}ms` }}
+    >
       <div className="absolute inset-0 rounded-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.6),inset_0_-8px_16px_rgba(85,33,48,0.12)]" />
       <div className="relative rounded-xl border border-white/35 bg-black/15 px-3 py-4 text-center shadow-[inset_0_1px_4px_rgba(255,255,255,0.35)]">
         <p className="text-[11px] uppercase tracking-[0.2em] text-muted">{unit.label}</p>
@@ -91,8 +94,8 @@ export function LiveCounter({ state }: Props) {
       </header>
 
       <div className="relative mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {units.map((unit) => (
-          <DigitalUnit key={unit.key} unit={unit} value={getUnitValue(elapsed, unit.key)} />
+        {units.map((unit, idx) => (
+          <DigitalUnit key={unit.key} unit={unit} value={getUnitValue(elapsed, unit.key)} index={idx} />
         ))}
       </div>
     </section>
