@@ -31,48 +31,63 @@ body {
   overflow-x: hidden;
   color: var(--ink);
   font-family: var(--font-body), 'Trebuchet MS', sans-serif;
-  background:
-    radial-gradient(circle at 12% 8%, rgba(245, 155, 176, 0.35), transparent 38%),
-    radial-gradient(circle at 87% 11%, rgba(255, 224, 210, 0.45), transparent 35%),
-    linear-gradient(160deg, rgba(255, 246, 238, 0.96), rgba(255, 238, 241, 0.92)),
-    var(--paper);
+  background: var(--paper);
 }
 
-.dark body {
+/* ── Aurora glow layer ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -2;
   background:
-    radial-gradient(circle at 15% 8%, rgba(245, 155, 176, 0.2), transparent 35%),
-    radial-gradient(circle at 82% 10%, rgba(137, 79, 93, 0.22), transparent 30%),
-    linear-gradient(160deg, rgba(37, 24, 27, 0.98), rgba(43, 25, 32, 0.98)),
-    var(--paper);
+    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(245, 155, 176, 0.38), transparent),
+    radial-gradient(ellipse 55% 45% at 80% 15%, rgba(255, 210, 190, 0.35), transparent),
+    radial-gradient(ellipse 50% 55% at 55% 65%, rgba(240, 170, 190, 0.22), transparent),
+    radial-gradient(ellipse 45% 40% at 25% 80%, rgba(255, 195, 210, 0.18), transparent);
+  animation: auroraDrift 20s ease-in-out infinite alternate;
 }
 
-body::before,
+.dark body::before {
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(245, 155, 176, 0.16), transparent),
+    radial-gradient(ellipse 55% 45% at 80% 15%, rgba(180, 100, 120, 0.2), transparent),
+    radial-gradient(ellipse 50% 55% at 55% 65%, rgba(200, 120, 145, 0.12), transparent),
+    radial-gradient(ellipse 45% 40% at 25% 80%, rgba(160, 80, 110, 0.1), transparent);
+}
+
+/* ── Soft vignette + shimmer ── */
 body::after {
   content: '';
   position: fixed;
+  inset: 0;
   pointer-events: none;
   z-index: -1;
+  background:
+    radial-gradient(circle at center, transparent 50%, rgba(37, 18, 22, 0.08) 100%);
+  opacity: 0.6;
 }
 
-body::before {
-  inset: 0;
-  opacity: 0.88;
+.dark body::after {
   background:
-    radial-gradient(ellipse at 12% 22%, rgba(255, 183, 198, 0.34) 0 8px, transparent 9px),
-    radial-gradient(ellipse at 14% 24%, rgba(255, 204, 217, 0.25) 0 7px, transparent 8px),
-    radial-gradient(ellipse at 86% 18%, rgba(255, 188, 205, 0.31) 0 8px, transparent 9px),
-    radial-gradient(ellipse at 78% 72%, rgba(255, 201, 214, 0.24) 0 6px, transparent 7px),
-    radial-gradient(ellipse at 30% 83%, rgba(255, 180, 199, 0.2) 0 7px, transparent 8px);
+    radial-gradient(circle at center, transparent 40%, rgba(15, 8, 10, 0.35) 100%);
+  opacity: 0.8;
 }
 
-body::after {
-  inset: 0;
-  opacity: 0.45;
-  background:
-    radial-gradient(circle at center, transparent 58%, rgba(37, 18, 22, 0.16) 100%),
-    repeating-radial-gradient(circle at 22% 24%, rgba(255, 255, 255, 0.14) 0 1px, transparent 1px 4px),
-    repeating-radial-gradient(circle at 80% 72%, rgba(255, 255, 255, 0.09) 0 1px, transparent 1px 5px);
-  mix-blend-mode: soft-light;
+@keyframes auroraDrift {
+  0% {
+    transform: scale(1) translate(0, 0);
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    transform: scale(1.05) translate(2%, -1%);
+    filter: hue-rotate(8deg);
+  }
+  100% {
+    transform: scale(1) translate(-1%, 1%);
+    filter: hue-rotate(-5deg);
+  }
 }
 
 * {
