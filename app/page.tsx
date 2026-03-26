@@ -2,11 +2,25 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { JourneyExperience } from '@/components/journey-experience';
 import { FloatingHearts } from '@/components/floating-hearts';
 import { getNormalizedState } from '@/lib/data';
+import { getMetAtUtc } from '@/lib/env';
+import type { RelationshipState } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  const { state } = await getNormalizedState();
+  let state: RelationshipState;
+  try {
+    ({ state } = await getNormalizedState());
+  } catch {
+    state = {
+      id: 1,
+      status: 'PENDING',
+      met_at_utc: getMetAtUtc(),
+      decided_at_utc: null,
+      anniversary_start_utc: null,
+      updated_at_utc: new Date().toISOString(),
+    };
+  }
 
   return (
     <>
